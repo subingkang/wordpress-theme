@@ -1,0 +1,747 @@
+/*
+Theme Name: My Custom Blog
+Theme URI: https://subkme.com
+Author: subk
+Author URI: https://subkme.com
+Description: 首页单列布局，图片随机images文件夹里，增加文章页的阅读量，通过WPOPT插件实现，首页文章新标签打开，页脚增加搜索模块
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: my-custom-blog
+*/
+
+/* ==================== 基础与布局样式 开始 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* 统一盒模型计算方式 */
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 设置基础字体 */
+    line-height: 1.6; /* 行高 */
+    color: #333; /* 文字颜色 */
+    background-color: #f8f9fa; /* 背景色 */
+}
+.container {
+    max-width: 1200px; /* 最大宽度 */
+    margin: 0 auto; /* 居中 */
+    padding: 0 20px; /* 左右内边距 */
+}
+/* ==================== 基础与布局样式 结束 ==================== */
+
+
+/* ==================== 页头样式 开始 ==================== */
+header {
+    background-color: #fff; /* 背景色 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影 */
+    position: sticky; /* 粘性定位 */
+    top: 0; /* 固定在顶部 */
+    z-index: 100; /* 层级 */
+}
+.header-content {
+    display: flex; /* Flex 布局 */
+    justify-content: space-between; /* 两端对齐 */
+    align-items: center; /* 垂直居中 */
+    padding: 20px 0; /* 上下内边距 */
+}
+.logo {
+    font-size: 24px; /* 字体大小 */
+    font-weight: 700; /* 字体粗细 */
+    color: #2c3e50; /* 文字颜色 */
+    text-decoration: none; /* 去除下划线 */
+}
+.logo span {
+    color: #3498db; /* 特定部分颜色 */
+}
+nav ul {
+    display: flex; /* Flex 布局 */
+    list-style: none; /* 去除列表默认样式 */
+}
+nav ul li {
+    margin-left: 30px; /* 左边距 */
+}
+nav ul li a {
+    text-decoration: none; /* 去除下划线 */
+    color: #555; /* 文字颜色 */
+    font-weight: 500; /* 字体粗细 */
+    transition: color 0.3s; /* 颜色过渡效果 */
+}
+nav ul li a:hover {
+    color: #3498db; /* 悬停颜色 */
+}
+/* ==================== 页头样式 结束 ==================== */
+
+
+/* ==================== Banner 样式 开始 ==================== */
+.banner {
+    height: 350px; /* 高度 */
+    /* 背景：半透明黑色遮罩 + 默认灰色背景图 */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), #6c757d center/cover no-repeat;
+    display: flex; /* Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    text-align: center; /* 文字居中 */
+    color: white; /* 文字颜色 */
+    margin-bottom: 40px; /* 下边距 */
+    transition: background-image 0.5s ease-in-out; /* 背景图片过渡效果 */
+}
+.banner-content {
+    max-width: 1200px; /* 最大宽度 */
+    padding: 20px; /* 内边距 */
+}
+.banner h1 {
+    font-size: 2.8rem; /* 字体大小 */
+    margin-bottom: 20px; /* 下边距 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 文字阴影 */
+}
+.banner p {
+    font-size: 1.5rem; /* 字体大小 */
+    margin-bottom: 30px; /* 下边距 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* 文字阴影 */
+}
+/* ==================== Banner 样式 结束 ==================== */
+
+
+/* ==================== 文章区域主样式 开始 ==================== */
+.articles-section {
+    padding: 40px 0 60px; /* 上左右下内边距 */
+}
+.section-title {
+    text-align: center; /* 文字居中 */
+    margin-bottom: 40px; /* 下边距 */
+    font-size: 2.5rem; /* 字体大小 */
+    color: #2c3e50; /* 文字颜色 */
+    position: relative; /* 相对定位 */
+}
+.section-title::after {
+    content: ''; /* 伪元素内容 */
+    display: block; /* 块级元素 */
+    width: 80px; /* 宽度 */
+    height: 4px; /* 高度 */
+    background-color: #3498db; /* 背景色 */
+    margin: 15px auto; /* 上下左右自动居中 */
+    border-radius: 2px; /* 圆角 */
+}
+.articles-grid {
+    display: grid; /* Grid 布局 */
+    grid-template-columns: 1fr; /* 单列布局 */
+    gap: 30px; /* 间距 */
+}
+/* ==================== 文章区域主样式 结束 ==================== */
+
+
+/* ==================== 文章卡片样式 开始 ==================== */
+.article-card {
+    background: white; /* 背景色 */
+    border-radius: 10px; /* 圆角 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* 阴影 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
+    display: flex; /* Flex 布局 */
+    flex-direction: row; /* 水平排列 */
+    height: 200px; /* 固定高度 */
+    overflow: hidden; /* 隐藏溢出内容 */
+    margin-bottom: 0; /* 重置可能的旧 margin */
+}
+.article-card:hover {
+    transform: translateY(-10px); /* 悬停上移 */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* 悬停阴影 */
+}
+/* ==================== 文章卡片样式 结束 ==================== */
+
+
+/* ==================== 文章图片/首字母图形样式 开始 ==================== */
+.article-img {
+    flex: 0 0 200px; /* 不放大、不缩小、基础宽度200px */
+    height: 200px; /* 高度与卡片一致 */
+    background-size: cover; /* 背景填充 */
+    background-position: center; /* 背景居中 */
+    display: flex; /* Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    font-size: 3rem; /* 首字母大小 */
+    font-weight: bold; /* 字体粗细 */
+    color: white; /* 首字母颜色 */
+}
+/* ==================== 文章图片/首字母图形样式 结束 ==================== */
+
+
+/* ==================== 文章内容区域样式 开始 ==================== */
+.article-content {
+    flex: 1; /* 占据剩余空间 */
+    display: flex; /* Flex 布局 */
+    flex-direction: column; /* 垂直排列 */
+    padding: 15px 20px; /* 内边距 */
+    overflow: hidden; /* 隐藏溢出 */
+}
+.article-date {
+    color: #666; /* 文字颜色 */
+    font-size: 0.85rem; /* 字体大小 */
+    font-weight: 600; /* 字体粗细 */
+    margin-bottom: 8px; /* 下边距 */
+    flex-shrink: 0; /* 不缩小 */
+    display: block; /* 块级元素 */
+}
+.article-title {
+    font-size: 1.25rem; /* 字体大小 */
+    margin-bottom: 10px; /* 下边距 */
+    color: #2c3e50; /* 文字颜色 */
+    flex-shrink: 0; /* 不缩小 */
+    display: -webkit-box; /* Webkit 盒模型 */
+    -webkit-line-clamp: 1; /* 限制1行 */
+    -webkit-box-orient: vertical; /* 垂直排列 */
+    overflow: hidden; /* 隐藏溢出 */
+    text-overflow: ellipsis; /* 省略号 */
+}
+.article-excerpt {
+    color: #666; /* 文字颜色 */
+    line-height: 1.6; /* 行高 */
+    margin-bottom: 15px; /* 下边距 */
+    flex-grow: 1; /* 占据剩余空间 */
+    overflow: hidden; /* 隐藏溢出 */
+    display: -webkit-box; /* Webkit 盒模型 */
+    -webkit-line-clamp: 2; /* 限制2行 */
+    -webkit-box-orient: vertical; /* 垂直排列 */
+    text-overflow: ellipsis; /* 省略号 */
+}
+.read-more {
+    color: #3498db; /* 文字颜色 */
+    text-decoration: none; /* 去除下划线 */
+    font-weight: 600; /* 字体粗细 */
+    display: flex; /* Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    font-size: 0.9rem; /* 字体大小 */
+    flex-shrink: 0; /* 不缩小 */
+    margin-top: auto; /* 自动上边距，推到底部 */
+}
+.read-more i {
+    margin-left: 5px; /* 左边距 */
+    transition: transform 0.3s; /* 过渡效果 */
+    font-size: 0.75rem; /* 字体大小 */
+}
+.read-more:hover i {
+    transform: translateX(3px); /* 悬停右移 */
+}
+/* ==================== 文章内容区域样式 结束 ==================== */
+
+
+/* ==================== 页脚样式 开始 ==================== */
+footer {
+    background-color: #2c3e50; /* 背景色 */
+    color: white; /* 文字颜色 */
+    padding: 50px 0 20px; /* 上左右下内边距 */
+}
+.footer-content {
+    display: grid; /* Grid 布局 */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 自适应列 */
+    gap: 30px; /* 间距 */
+    margin-bottom: 40px; /* 下边距 */
+}
+.footer-column h3 {
+    font-size: 1.5rem; /* 字体大小 */
+    margin-bottom: 20px; /* 下边距 */
+    position: relative; /* 相对定位 */
+    padding-bottom: 10px; /* 下内边距 */
+}
+.footer-column h3::after {
+    content: ''; /* 伪元素内容 */
+    position: absolute; /* 绝对定位 */
+    bottom: 0; /* 底部 */
+    left: 0; /* 左侧 */
+    width: 50px; /* 宽度 */
+    height: 3px; /* 高度 */
+    background-color: #3498db; /* 背景色 */
+}
+.footer-column p {
+    margin-bottom: 20px; /* 下边距 */
+    line-height: 1.8; /* 行高 */
+}
+.social-links {
+    display: flex; /* Flex 布局 */
+    gap: 15px; /* 间距 */
+}
+.social-links a {
+    display: flex; /* Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    width: 40px; /* 宽度 */
+    height: 40px; /* 高度 */
+    background-color: rgba(255, 255, 255, 0.1); /* 背景色 */
+    border-radius: 50%; /* 圆形 */
+    color: white; /* 文字颜色 */
+    transition: all 0.3s; /* 过渡效果 */
+    text-decoration: none; /* 去除下划线 */
+    font-size: 1.25rem; /* 字体大小 */
+}
+.social-links a:hover {
+    background-color: #3498db; /* 悬停背景色 */
+    transform: translateY(-5px); /* 悬停上移 */
+}
+.footer-column ul {
+    list-style: none; /* 去除列表默认样式 */
+}
+.footer-column ul li {
+    margin-bottom: 12px; /* 下边距 */
+}
+.footer-column ul li a {
+    color: #ddd; /* 文字颜色 */
+    text-decoration: none; /* 去除下划线 */
+    transition: color 0.3s; /* 过渡效果 */
+}
+.footer-column ul li a:hover {
+    color: #3498db; /* 悬停颜色 */
+    padding-left: 5px; /* 左内边距 */
+}
+.copyright {
+    text-align: center; /* 文字居中 */
+    padding-top: 20px; /* 上内边距 */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* 顶部边框 */
+    font-size: 0.9rem; /* 字体大小 */
+    color: #aaa; /* 文字颜色 */
+}
+/* ==================== 页脚样式 结束 ==================== */
+
+
+/* ==================== 页脚订阅博客按钮美化 开始 ==================== */
+.footer-column .btn {
+    display: inline-block; /* 行内块元素 */
+    width: 100%; /* 宽度 */
+    padding: 10px 20px; /* 内边距 */
+    border: 2px solid #3498db; /* 边框 */
+    border-radius: 4px; /* 圆角 */
+    background-color: #3498db; /* 背景色 */
+    color: white; /* 文字颜色 */
+    font-weight: 600; /* 字体粗细 */
+    font-size: 0.95rem; /* 字体大小 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 去除下划线 */
+    cursor: pointer; /* 鼠标指针 */
+    transition: all 0.3s ease; /* 过渡效果 */
+    box-sizing: border-box; /* 盒模型 */
+}
+.footer-column .btn:hover {
+    background-color: transparent; /* 悬停背景色 */
+    color: #3498db; /* 悬停文字颜色 */
+    transform: translateY(-2px); /* 悬停上移 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 悬停阴影 */
+}
+.footer-column .btn:focus {
+    outline: 2px dashed #fff; /* 聚焦轮廓 */
+    outline-offset: 2px; /* 轮廓偏移 */
+}
+/* ==================== 页脚订阅博客按钮美化 结束 ==================== */
+
+
+/* ==================== 响应式设计 开始 ==================== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column; /* 垂直排列 */
+        text-align: center; /* 文字居中 */
+    }
+    nav ul {
+        margin-top: 20px; /* 上边距 */
+    }
+    nav ul li {
+        margin: 0 10px; /* 左右边距 */
+    }
+    .banner {
+        height: 280px; /* 高度 */
+    }
+    .banner h1 {
+        font-size: 2.5rem; /* 字体大小 */
+    }
+    .banner p {
+        font-size: 1.2rem; /* 字体大小 */
+    }
+    .article-card {
+        flex-direction: column; /* 垂直排列 */
+        height: auto; /* 高度自适应 */
+    }
+    .article-img {
+        flex: 0 0 auto; /* 不放大、不缩小、基础宽度自动 */
+        width: 100%; /* 宽度 */
+        height: 200px; /* 高度 */
+    }
+    .article-excerpt {
+        -webkit-line-clamp: 3; /* 限制3行 */
+    }
+}
+@media (max-width: 480px) {
+    .banner {
+        height: 220px; /* 高度 */
+    }
+    .banner h1 {
+        font-size: 2rem; /* 字体大小 */
+    }
+    .banner p {
+        font-size: 1rem; /* 字体大小 */
+    }
+    .section-title {
+        font-size: 2rem; /* 字体大小 */
+    }
+    nav ul {
+        flex-wrap: wrap; /* 换行 */
+        justify-content: center; /* 居中 */
+    }
+    nav ul li {
+        margin: 5px 10px; /* 左右边距 */
+    }
+    .article-img {
+        height: 160px; /* 高度 */
+    }
+}
+/* ==================== 响应式设计 结束 ==================== */
+
+
+/* ==================== WordPress 特定样式 开始 ==================== */
+.entry-content {
+    margin-top: 20px; /* 上边距 */
+}
+.entry-content img {
+    max-width: 100%; /* 最大宽度 */
+    height: auto; /* 高度自适应 */
+}
+.menu {
+    list-style: none; /* 去除列表默认样式 */
+    padding-left: 0; /* 左内边距 */
+}
+.menu > li {
+    margin-left: 30px; /* 左边距 */
+}
+.menu li a {
+    text-decoration: none; /* 去除下划线 */
+    color: #555; /* 文字颜色 */
+    font-weight: 500; /* 字体粗细 */
+    transition: color 0.3s; /* 过渡效果 */
+}
+.menu li a:hover {
+    color: #3498db; /* 悬停颜色 */
+}
+/* ==================== WordPress 特定样式 结束 ==================== */
+
+
+/* ==================== 分页样式美化 开始 ==================== */
+.pagination-wrapper {
+    margin-top: 40px; /* 上边距 */
+    text-align: center; /* 文字居中 */
+}
+.pagination-wrapper ul.page-numbers {
+    display: inline-flex; /* 行内 Flex 布局 */
+    flex-wrap: wrap; /* 换行 */
+    justify-content: center; /* 居中 */
+    align-items: center; /* 垂直居中 */
+    gap: 5px; /* 间距 */
+    list-style: none; /* 去除列表默认样式 */
+    padding: 0; /* 内边距 */
+    margin: 0; /* 外边距 */
+    background-color: #fff; /* 背景色 */
+    border-radius: 5px; /* 圆角 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 阴影 */
+    padding: 10px; /* 内边距 */
+}
+.pagination-wrapper .page-numbers li {
+    display: block; /* 块级元素 */
+    margin: 0; /* 外边距 */
+}
+.pagination-wrapper .page-numbers a,
+.pagination-wrapper .page-numbers span {
+    display: inline-flex; /* 行内 Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    min-width: 40px; /* 最小宽度 */
+    height: 40px; /* 高度 */
+    padding: 0 12px; /* 左右内边距 */
+    margin: 0; /* 外边距 */
+    font-weight: 500; /* 字体粗细 */
+    color: #555; /* 文字颜色 */
+    text-decoration: none; /* 去除下划线 */
+    background-color: #f8f9fa; /* 背景色 */
+    border: 1px solid #dee2e6; /* 边框 */
+    border-radius: 4px; /* 圆角 */
+    transition: all 0.2s ease-in-out; /* 过渡效果 */
+}
+.pagination-wrapper .page-numbers a:hover {
+    color: #fff; /* 悬停文字颜色 */
+    background-color: #3498db; /* 悬停背景色 */
+    border-color: #3498db; /* 悬停边框颜色 */
+    text-decoration: none; /* 去除下划线 */
+    transform: translateY(-2px); /* 悬停上移 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 悬停阴影 */
+}
+.pagination-wrapper .page-numbers span.current {
+    color: #fff; /* 当前页文字颜色 */
+    background-color: #3498db; /* 当前页背景色 */
+    border-color: #3498db; /* 当前页边框颜色 */
+    cursor: default; /* 默认鼠标指针 */
+}
+.pagination-wrapper .page-numbers a.prev,
+.pagination-wrapper .page-numbers a.next {
+    background-color: #e9ecef; /* 背景色 */
+    border-color: #dee2e6; /* 边框颜色 */
+    color: #495057; /* 文字颜色 */
+    font-weight: 600; /* 字体粗细 */
+    padding: 0 15px; /* 左右内边距 */
+}
+.pagination-wrapper .page-numbers a.prev:hover,
+.pagination-wrapper .page-numbers a.next:hover {
+    background-color: #3498db; /* 悬停背景色 */
+    border-color: #3498db; /* 悬停边框颜色 */
+    color: #fff; /* 悬停文字颜色 */
+}
+/* ==================== 分页样式美化 结束 ==================== */
+
+
+/* ==================== 文章详情页内容排版与代码块美化 开始 ==================== */
+.entry-content p {
+    margin-bottom: 1.5em; /* 下边距 */
+}
+.entry-content h1, .entry-content h2, .entry-content h3,
+.entry-content h4, .entry-content h5, .entry-content h6 {
+    margin-top: 1.5em; /* 上边距 */
+    margin-bottom: 0.75em; /* 下边距 */
+}
+.entry-content ul, .entry-content ol {
+    margin-bottom: 1.5em; /* 下边距 */
+    padding-left: 2em; /* 左内边距 */
+}
+.entry-content li {
+    margin-bottom: 0.5em; /* 下边距 */
+}
+.entry-content blockquote {
+    margin: 0 0 1.5em; /* 外边距 */
+    padding: 0 1em; /* 左右内边距 */
+    border-left: 4px solid #3498db; /* 左边框 */
+    color: #6c757d; /* 文字颜色 */
+    font-style: italic; /* 斜体 */
+}
+
+/* --- 代码块美化 --- */
+.entry-content pre,
+.article-content pre {
+    background-color: #1E1E1E; /* 深色背景 */
+    border: 1px solid #444444; /* 边框 */
+    border-radius: 8px; /* 圆角 */
+    padding: 16px; /* 内边距 */
+    overflow: auto; /* 滚动条 */
+    font-size: 0.9em; /* 字体大小 */
+    line-height: 1.5; /* 行高 */
+    margin: 1.6em 0; /* 上下外边距 */
+    color: #d4d4d4; /* 文字颜色 */
+    tab-size: 4; /* Tab 宽度 */
+}
+.entry-content pre code,
+.article-content pre code {
+    background: none; /* 背景色 */
+    border: none; /* 边框 */
+    padding: 0; /* 内边距 */
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; /* 字体 */
+    font-size: 1em; /* 字体大小 */
+    color: inherit; /* 继承颜色 */
+    white-space: pre; /* 空白符处理 */
+    word-wrap: normal; /* 单词换行 */
+}
+.entry-content code:not(pre code),
+.article-content code:not(pre code) {
+    background-color: rgba(27, 31, 35, 0.08); /* 浅灰色背景 */
+    border-radius: 4px; /* 圆角 */
+    padding: 0.2em 0.4em; /* 内边距 */
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; /* 字体 */
+    font-size: 0.85em; /* 字体大小 */
+    color: #24292f; /* 文字颜色 */
+    word-break: break-word; /* 单词换行 */
+}
+/* ==================== 文章详情页内容排版与代码块美化 结束 ==================== */
+
+
+/* --- 美化文章详情页的元数据 (作者、日期、分类) 和标签 --- */
+/* 文章标题样式 */
+h1.article-title {
+    text-align: center;
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 2rem;
+}
+
+/* 文章元数据容器 */
+.article-meta {
+    text-align: center;
+    color: #7F8C8D;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    background-color: transparent;
+    padding: 0;
+}
+
+/* 元数据项 (统一作者和分类的样式) */
+.article-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* 图标和文字间距 */
+    margin: 0 10px; /* 项之间的水平间距 */
+    color: #7F8C8D;
+}
+/* 元数据项中的链接也强制为灰色 */
+.article-meta span a {
+    color: #7F8C8D;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.2s ease;
+}
+.article-meta span a:hover {
+    color: #5D6D7E;
+}
+
+/* 特别指定日期的颜色，防止被覆盖 */
+.article-meta .article-date {
+    color: #7F8C8D;
+    font-weight: 600;
+    margin-right: 20px;
+}
+.article-meta .article-date a {
+    color: #7F8C8D;
+}
+.article-meta .article-author a,
+.article-meta .article-categories a {
+    color: #7F8C8D;
+    font-weight: normal;
+}
+.article-meta .article-author a:hover,
+.article-meta .article-categories a:hover {
+    color: #5D6D7E;
+}
+
+
+/* 确保元数据和标签图标样式一致 (灰色) */
+.article-meta i.fa-calendar-alt,
+.article-meta i.fa-user,
+.article-meta i.fa-folder-open,
+.article-tags i.fa-tags {
+    font-size: 0.9em;
+    color: #7F8C8D;
+}
+
+/* --- 调整文章标签样式 --- */
+.article-tags {
+    /* 左对齐 */
+    text-align: left;
+    /* 移除上下边框和背景色 */
+    border-top: none;
+    border-bottom: none;
+    background-color: transparent;
+    border-radius: 0;
+    /* 调整内外边距 */
+    margin: 20px 0;
+    padding: 10px 0;
+    font-size: 0.95rem;
+    color: #7F8C8D;
+}
+.article-tags p {
+    margin: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.article-tags strong {
+    white-space: nowrap;
+}
+/* 标签链接样式 (也改为灰色) */
+.article-tags a {
+    color: #7F8C8D;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.article-tags a:hover {
+    color: #5D6D7E;
+}
+/* --- 美化文章详情页的元数据和标签样式 结束 --- */
+
+
+/* ==================== 美化文章导航链接 (上一篇/下一篇) 开始 ==================== */
+.post-navigation {
+    margin-top: 50px; /* 上边距 */
+    padding-top: 30px; /* 上内边距 */
+    border-top: 1px solid #e1e4e8; /* 顶部边框 */
+}
+.nav-links {
+    display: flex; /* Flex 布局 */
+    justify-content: space-between; /* 两端对齐 */
+    align-items: flex-start; /* 顶部对齐 */
+    flex-wrap: wrap; /* 换行 */
+    gap: 20px; /* 间距 */
+}
+.nav-previous,
+.nav-next {
+    flex: 1; /* 占据空间 */
+    min-width: 0; /* 最小宽度 */
+}
+.nav-previous a,
+.nav-next a {
+    display: block; /* 块级元素 */
+    text-decoration: none; /* 去除下划线 */
+    color: #3498db; /* 链接颜色 */
+    font-weight: 500; /* 字体粗细 */
+    transition: all 0.2s ease-in-out; /* 过渡效果 */
+    overflow: hidden; /* 隐藏溢出 */
+    text-overflow: ellipsis; /* 省略号 */
+    white-space: nowrap; /* 不换行 */
+}
+.nav-previous a:hover,
+.nav-next a:hover {
+    color: #2980b9; /* 悬停颜色 */
+    transform: translateY(-2px); /* 悬停上移 */
+}
+.nav-previous {
+    text-align: left; /* 文字左对齐 */
+}
+.nav-next {
+    text-align: right; /* 文字右对齐 */
+}
+.nav-previous a i,
+.nav-next a i {
+    margin: 0 5px; /* 左右边距 */
+}
+@media (max-width: 576px) {
+    .nav-links {
+        flex-direction: column; /* 垂直排列 */
+    }
+    .nav-previous,
+    .nav-next {
+        text-align: center; /* 文字居中 */
+    }
+}
+/* ==================== 美化文章导航链接 (上一篇/下一篇) 结束 ==================== */
+
+
+/* ==================== 优化代码高亮颜色 (适配 #1E1E1E 背景) 开始 ==================== */
+.entry-content pre .pln { color: #d4d4d4; } /* 普通文本 - 亮灰色 */
+.entry-content pre .str { color: #ce9178; } /* 字符串 - 橙棕色 */
+.entry-content pre .kwd { color: #569cd6; } /* 关键字 - 蓝色 */
+.entry-content pre .com { color: #6a9955; } /* 注释 - 绿色 */
+.entry-content pre .typ { color: #4ec9b0; } /* 类型 - 青色 */
+.entry-content pre .lit { color: #b5cea8; } /* 字面量 (数字) - 浅绿 */
+.entry-content pre .pun { color: #d4d4d4; } /* 标点 - 亮灰色 */
+.entry-content pre .opn { color: #d4d4d4; } /* 括号开 - 亮灰色 */
+.entry-content pre .clo { color: #d4d4d4; } /* 括号闭 - 亮灰色 */
+.entry-content pre .tag { color: #808080; } /* 标签 - 灰色 */
+.entry-content pre .atn { color: #9cdcfe; } /* 属性名 - 浅蓝 */
+.entry-content pre .atv { color: #ce9178; } /* 属性值 - 橙棕色 */
+.entry-content pre .dec { color: #dcdcaa; } /* 装饰器 - 卡其色 */
+.entry-content pre .var { color: #9cdcfe; } /* 变量 - 浅蓝 */
+.entry-content pre .fun { color: #dcdcaa; } /* 函数 - 卡其色 */
+/* ==================== 优化代码高亮颜色 (适配 #1E1E1E 背景) 结束 ==================== */
+
+
+/* ==================== 页脚搜索功能样式 开始 ==================== */
+.footer-column .search-form input[type="search"] {
+    width: 100%; /* 宽度 */
+    padding: 10px; /* 内边距 */
+    margin-bottom: 10px; /* 下边距 */
+    border-radius: 4px; /* 圆角 */
+    border: 1px solid #ccc; /* 边框 */
+    box-sizing: border-box; /* 盒模型 */
+    font-size: 0.95rem; /* 字体大小 */
+}
+.footer-column .search-submit i {
+    margin-right: 5px; /* 右边距 */
+}
+/* ==================== 页脚搜索功能样式 结束 ==================== */
